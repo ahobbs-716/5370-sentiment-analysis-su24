@@ -1,0 +1,264 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=windows-1252"> 
+  <title>Coverage Report > TestRunner</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">junit.textui</a>
+</div>
+
+<h1>Coverage Summary for Class: TestRunner (junit.textui)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">TestRunner</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    22.2%
+  </span>
+  <span class="absValue">
+    (4/18)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    7.5%
+  </span>
+  <span class="absValue">
+    (5/67)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;//
+&nbsp;// Source code recreated from a .class file by IntelliJ IDEA
+&nbsp;// (powered by FernFlower decompiler)
+&nbsp;//
+&nbsp;
+&nbsp;package junit.textui;
+&nbsp;
+&nbsp;import java.io.PrintStream;
+&nbsp;import junit.framework.Test;
+&nbsp;import junit.framework.TestCase;
+&nbsp;import junit.framework.TestResult;
+&nbsp;import junit.framework.TestSuite;
+&nbsp;import junit.runner.BaseTestRunner;
+&nbsp;import junit.runner.Version;
+&nbsp;
+&nbsp;public class TestRunner extends BaseTestRunner {
+&nbsp;    private ResultPrinter fPrinter;
+&nbsp;    public static final int SUCCESS_EXIT = 0;
+&nbsp;    public static final int FAILURE_EXIT = 1;
+&nbsp;    public static final int EXCEPTION_EXIT = 2;
+&nbsp;
+&nbsp;    public TestRunner() {
+&nbsp;        this(System.out);
+&nbsp;    }
+&nbsp;
+&nbsp;    public TestRunner(PrintStream writer) {
+&nbsp;        this(new ResultPrinter(writer));
+&nbsp;    }
+&nbsp;
+&nbsp;    public TestRunner(ResultPrinter printer) {
+&nbsp;        this.fPrinter = printer;
+&nbsp;    }
+&nbsp;
+&nbsp;    public static void run(Class&lt;? extends TestCase&gt; testClass) {
+&nbsp;        run((Test)(new TestSuite(testClass)));
+&nbsp;    }
+&nbsp;
+&nbsp;    public static TestResult run(Test test) {
+&nbsp;        TestRunner runner = new TestRunner();
+&nbsp;        return runner.doRun(test);
+<b class="fc">&nbsp;    }</b>
+&nbsp;
+&nbsp;    public static void runAndWait(Test suite) {
+&nbsp;        TestRunner aTestRunner = new TestRunner();
+&nbsp;        aTestRunner.doRun(suite, true);
+&nbsp;    }
+&nbsp;
+<b class="fc">&nbsp;    public void testFailed(int status, Test test, Throwable e) {</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void testStarted(String testName) {
+&nbsp;    }
+&nbsp;
+<b class="fc">&nbsp;    public void testEnded(String testName) {</b>
+<b class="fc">&nbsp;    }</b>
+&nbsp;
+&nbsp;    protected TestResult createTestResult() {
+&nbsp;        return new TestResult();
+&nbsp;    }
+&nbsp;
+&nbsp;    public TestResult doRun(Test test) {
+<b class="nc">&nbsp;        return this.doRun(test, false);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public TestResult doRun(Test suite, boolean wait) {
+&nbsp;        TestResult result = this.createTestResult();
+&nbsp;        result.addListener(this.fPrinter);
+&nbsp;        long startTime = System.currentTimeMillis();
+&nbsp;        suite.run(result);
+&nbsp;        long endTime = System.currentTimeMillis();
+&nbsp;        long runTime = endTime - startTime;
+&nbsp;        this.fPrinter.print(result, runTime);
+&nbsp;        this.pause(wait);
+&nbsp;        return result;
+&nbsp;    }
+<b class="nc">&nbsp;</b>
+<b class="nc">&nbsp;    protected void pause(boolean wait) {</b>
+&nbsp;        if (wait) {
+&nbsp;            this.fPrinter.printWaitPrompt();
+&nbsp;
+&nbsp;            try {
+&nbsp;                System.in.read();
+&nbsp;            } catch (Exception var3) {
+&nbsp;            }
+<b class="nc">&nbsp;</b>
+<b class="nc">&nbsp;        }</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public static void main(String[] args) {
+&nbsp;        TestRunner aTestRunner = new TestRunner();
+<b class="nc">&nbsp;</b>
+&nbsp;        try {
+&nbsp;            TestResult r = aTestRunner.start(args);
+&nbsp;            if (!r.wasSuccessful()) {
+<b class="nc">&nbsp;                System.exit(1);</b>
+&nbsp;            }
+&nbsp;
+&nbsp;            System.exit(0);
+<b class="nc">&nbsp;        } catch (Exception var3) {</b>
+&nbsp;            System.err.println(var3.getMessage());
+&nbsp;            System.exit(2);
+&nbsp;        }
+&nbsp;
+&nbsp;    }
+<b class="nc">&nbsp;</b>
+&nbsp;    public TestResult start(String[] args) throws Exception {
+&nbsp;        String testCase = &quot;&quot;;
+&nbsp;        String method = &quot;&quot;;
+<b class="nc">&nbsp;        boolean wait = false;</b>
+&nbsp;
+&nbsp;        for(int i = 0; i &lt; args.length; ++i) {
+&nbsp;            if (args[i].equals(&quot;-wait&quot;)) {
+<b class="nc">&nbsp;                wait = true;</b>
+<b class="nc">&nbsp;            } else if (args[i].equals(&quot;-c&quot;)) {</b>
+<b class="nc">&nbsp;                ++i;</b>
+<b class="nc">&nbsp;                testCase = this.extractClassName(args[i]);</b>
+<b class="nc">&nbsp;            } else if (args[i].equals(&quot;-m&quot;)) {</b>
+<b class="nc">&nbsp;                ++i;</b>
+<b class="nc">&nbsp;                String arg = args[i];</b>
+&nbsp;                int lastIndex = arg.lastIndexOf(46);
+<b class="nc">&nbsp;                testCase = arg.substring(0, lastIndex);</b>
+<b class="nc">&nbsp;                method = arg.substring(lastIndex + 1);</b>
+&nbsp;            } else if (args[i].equals(&quot;-v&quot;)) {
+&nbsp;                System.err.println(&quot;JUnit &quot; + Version.id() + &quot; by Kent Beck and Erich Gamma&quot;);
+&nbsp;            } else {
+<b class="nc">&nbsp;                testCase = args[i];</b>
+<b class="nc">&nbsp;            }</b>
+&nbsp;        }
+<b class="nc">&nbsp;</b>
+<b class="nc">&nbsp;        if (testCase.equals(&quot;&quot;)) {</b>
+<b class="nc">&nbsp;            throw new Exception(&quot;Usage: TestRunner [-wait] testCaseName, where name is the name of the TestCase class&quot;);</b>
+&nbsp;        } else {
+&nbsp;            try {
+&nbsp;                if (!method.equals(&quot;&quot;)) {
+<b class="nc">&nbsp;                    return this.runSingleMethod(testCase, method, wait);</b>
+&nbsp;                } else {
+<b class="nc">&nbsp;                    Test suite = this.getTest(testCase);</b>
+<b class="nc">&nbsp;                    return this.doRun(suite, wait);</b>
+<b class="nc">&nbsp;                }</b>
+&nbsp;            } catch (Exception var8) {
+<b class="nc">&nbsp;                throw new Exception(&quot;Could not create and run test suite: &quot; + var8);</b>
+<b class="nc">&nbsp;            }</b>
+<b class="nc">&nbsp;        }</b>
+<b class="nc">&nbsp;    }</b>
+<b class="nc">&nbsp;</b>
+&nbsp;    protected TestResult runSingleMethod(String testCase, String method, boolean wait) throws Exception {
+&nbsp;        Class&lt;? extends TestCase&gt; testClass = this.loadSuiteClass(testCase).asSubclass(TestCase.class);
+&nbsp;        Test test = TestSuite.createTest(testClass, method);
+&nbsp;        return this.doRun(test, wait);
+&nbsp;    }
+&nbsp;
+&nbsp;    protected void runFailed(String message) {
+<b class="nc">&nbsp;        System.err.println(message);</b>
+<b class="nc">&nbsp;        System.exit(1);</b>
+<b class="nc">&nbsp;    }</b>
+&nbsp;
+<b class="nc">&nbsp;    public void setPrinter(ResultPrinter printer) {</b>
+<b class="nc">&nbsp;        this.fPrinter = printer;</b>
+<b class="nc">&nbsp;    }</b>
+<b class="nc">&nbsp;}</b>
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-06-04 11:14</div>
+</div>
+</body>
+</html>

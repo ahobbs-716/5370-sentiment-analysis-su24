@@ -1,0 +1,455 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=windows-1252"> 
+  <title>Coverage Report > TestClass</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">org.junit.runners.model</a>
+</div>
+
+<h1>Coverage Summary for Class: TestClass (org.junit.runners.model)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">TestClass</td>
+<td class="coverageStat">
+  <span class="percent">
+    81.5%
+  </span>
+  <span class="absValue">
+    (22/27)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    53.4%
+  </span>
+  <span class="absValue">
+    (31/58)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    64.6%
+  </span>
+  <span class="absValue">
+    (62/96)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">TestClass$FieldComparator</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (2/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (2/2)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">TestClass$MethodComparator</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (2/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (2/2)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    83.9%
+  </span>
+  <span class="absValue">
+    (26/31)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    53.4%
+  </span>
+  <span class="absValue">
+    (31/58)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    66%
+  </span>
+  <span class="absValue">
+    (66/100)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;//
+&nbsp;// Source code recreated from a .class file by IntelliJ IDEA
+&nbsp;// (powered by FernFlower decompiler)
+&nbsp;//
+&nbsp;
+&nbsp;package org.junit.runners.model;
+&nbsp;
+&nbsp;import java.lang.annotation.Annotation;
+&nbsp;import java.lang.reflect.Constructor;
+&nbsp;import java.lang.reflect.Field;
+&nbsp;import java.lang.reflect.Method;
+&nbsp;import java.lang.reflect.Modifier;
+&nbsp;import java.util.ArrayList;
+&nbsp;import java.util.Arrays;
+&nbsp;import java.util.Collections;
+&nbsp;import java.util.Comparator;
+&nbsp;import java.util.Iterator;
+&nbsp;import java.util.LinkedHashMap;
+&nbsp;import java.util.LinkedHashSet;
+&nbsp;import java.util.List;
+&nbsp;import java.util.Map;
+&nbsp;import java.util.Set;
+&nbsp;import org.junit.Assert;
+&nbsp;import org.junit.Before;
+&nbsp;import org.junit.BeforeClass;
+&nbsp;import org.junit.internal.MethodSorter;
+&nbsp;
+&nbsp;public class TestClass implements Annotatable {
+&nbsp;    private static final FieldComparator FIELD_COMPARATOR = new FieldComparator();
+&nbsp;    private static final MethodComparator METHOD_COMPARATOR = new MethodComparator();
+&nbsp;    private final Class&lt;?&gt; clazz;
+<b class="fc">&nbsp;    private final Map&lt;Class&lt;? extends Annotation&gt;, List&lt;FrameworkMethod&gt;&gt; methodsForAnnotations;</b>
+<b class="fc">&nbsp;    private final Map&lt;Class&lt;? extends Annotation&gt;, List&lt;FrameworkField&gt;&gt; fieldsForAnnotations;</b>
+&nbsp;
+&nbsp;    public TestClass(Class&lt;?&gt; clazz) {
+&nbsp;        this.clazz = clazz;
+&nbsp;        if (clazz != null &amp;&amp; clazz.getConstructors().length &gt; 1) {
+&nbsp;            throw new IllegalArgumentException(&quot;Test class can only have one constructor&quot;);
+&nbsp;        } else {
+&nbsp;            Map&lt;Class&lt;? extends Annotation&gt;, List&lt;FrameworkMethod&gt;&gt; methodsForAnnotations = new LinkedHashMap();
+&nbsp;            Map&lt;Class&lt;? extends Annotation&gt;, List&lt;FrameworkField&gt;&gt; fieldsForAnnotations = new LinkedHashMap();
+&nbsp;            this.scanAnnotatedMembers(methodsForAnnotations, fieldsForAnnotations);
+&nbsp;            this.methodsForAnnotations = makeDeeplyUnmodifiable(methodsForAnnotations);
+&nbsp;            this.fieldsForAnnotations = makeDeeplyUnmodifiable(fieldsForAnnotations);
+<b class="fc">&nbsp;        }</b>
+<b class="fc">&nbsp;    }</b>
+<b class="pc">&nbsp;</b>
+<b class="nc">&nbsp;    protected void scanAnnotatedMembers(Map&lt;Class&lt;? extends Annotation&gt;, List&lt;FrameworkMethod&gt;&gt; methodsForAnnotations, Map&lt;Class&lt;? extends Annotation&gt;, List&lt;FrameworkField&gt;&gt; fieldsForAnnotations) {</b>
+&nbsp;        Iterator i$ = getSuperClasses(this.clazz).iterator();
+&nbsp;
+&nbsp;        while(i$.hasNext()) {
+<b class="fc">&nbsp;            Class&lt;?&gt; eachClass = (Class)i$.next();</b>
+&nbsp;            Method[] arr$ = MethodSorter.getDeclaredMethods(eachClass);
+<b class="fc">&nbsp;            int len$ = arr$.length;</b>
+&nbsp;
+&nbsp;            int i$;
+<b class="fc">&nbsp;            for(i$ = 0; i$ &lt; len$; ++i$) {</b>
+&nbsp;                Method eachMethod = arr$[i$];
+<b class="fc">&nbsp;                addToAnnotationLists(new FrameworkMethod(eachMethod), methodsForAnnotations);</b>
+<b class="fc">&nbsp;            }</b>
+&nbsp;
+&nbsp;            Field[] arr$ = getSortedDeclaredFields(eachClass);
+&nbsp;            len$ = arr$.length;
+<b class="fc">&nbsp;</b>
+<b class="fc">&nbsp;            for(i$ = 0; i$ &lt; len$; ++i$) {</b>
+<b class="fc">&nbsp;                Field eachField = arr$[i$];</b>
+&nbsp;                addToAnnotationLists(new FrameworkField(eachField), fieldsForAnnotations);
+&nbsp;            }
+&nbsp;        }
+<b class="fc">&nbsp;</b>
+<b class="fc">&nbsp;    }</b>
+&nbsp;
+&nbsp;    private static Field[] getSortedDeclaredFields(Class&lt;?&gt; clazz) {
+&nbsp;        Field[] declaredFields = clazz.getDeclaredFields();
+&nbsp;        Arrays.sort(declaredFields, FIELD_COMPARATOR);
+&nbsp;        return declaredFields;
+<b class="fc">&nbsp;    }</b>
+<b class="fc">&nbsp;</b>
+<b class="fc">&nbsp;    protected static &lt;T extends FrameworkMember&lt;T&gt;&gt; void addToAnnotationLists(T member, Map&lt;Class&lt;? extends Annotation&gt;, List&lt;T&gt;&gt; map) {</b>
+&nbsp;        Annotation[] arr$ = member.getAnnotations();
+&nbsp;        int len$ = arr$.length;
+&nbsp;
+&nbsp;        for(int i$ = 0; i$ &lt; len$; ++i$) {
+<b class="fc">&nbsp;            Annotation each = arr$[i$];</b>
+<b class="fc">&nbsp;            Class&lt;? extends Annotation&gt; type = each.annotationType();</b>
+<b class="fc">&nbsp;            List&lt;T&gt; members = getAnnotatedMembers(map, type, true);</b>
+<b class="fc">&nbsp;            T memberToAdd = member.handlePossibleBridgeMethod(members);</b>
+<b class="pc">&nbsp;            if (memberToAdd == null) {</b>
+&nbsp;                return;
+&nbsp;            }
+<b class="pc">&nbsp;</b>
+<b class="nc">&nbsp;            if (runsTopToBottom(type)) {</b>
+&nbsp;                members.add(0, memberToAdd);
+<b class="fc">&nbsp;            } else {</b>
+&nbsp;                members.add(memberToAdd);
+&nbsp;            }
+&nbsp;        }
+&nbsp;
+&nbsp;    }
+&nbsp;
+<b class="fc">&nbsp;    private static &lt;T extends FrameworkMember&lt;T&gt;&gt; Map&lt;Class&lt;? extends Annotation&gt;, List&lt;T&gt;&gt; makeDeeplyUnmodifiable(Map&lt;Class&lt;? extends Annotation&gt;, List&lt;T&gt;&gt; source) {</b>
+&nbsp;        Map&lt;Class&lt;? extends Annotation&gt;, List&lt;T&gt;&gt; copy = new LinkedHashMap();
+<b class="fc">&nbsp;        Iterator i$ = source.entrySet().iterator();</b>
+<b class="fc">&nbsp;</b>
+&nbsp;        while(i$.hasNext()) {
+<b class="fc">&nbsp;            Map.Entry&lt;Class&lt;? extends Annotation&gt;, List&lt;T&gt;&gt; entry = (Map.Entry)i$.next();</b>
+&nbsp;            copy.put(entry.getKey(), Collections.unmodifiableList((List)entry.getValue()));
+&nbsp;        }
+&nbsp;
+&nbsp;        return Collections.unmodifiableMap(copy);
+&nbsp;    }
+&nbsp;
+&nbsp;    public List&lt;FrameworkMethod&gt; getAnnotatedMethods() {
+&nbsp;        List&lt;FrameworkMethod&gt; methods = this.collectValues(this.methodsForAnnotations);
+&nbsp;        Collections.sort(methods, METHOD_COMPARATOR);
+<b class="fc">&nbsp;        return methods;</b>
+<b class="fc">&nbsp;    }</b>
+<b class="fc">&nbsp;</b>
+&nbsp;    public List&lt;FrameworkMethod&gt; getAnnotatedMethods(Class&lt;? extends Annotation&gt; annotationClass) {
+&nbsp;        return Collections.unmodifiableList(getAnnotatedMembers(this.methodsForAnnotations, annotationClass, false));
+&nbsp;    }
+&nbsp;
+&nbsp;    public List&lt;FrameworkField&gt; getAnnotatedFields() {
+&nbsp;        return this.collectValues(this.fieldsForAnnotations);
+&nbsp;    }
+&nbsp;
+<b class="fc">&nbsp;    public List&lt;FrameworkField&gt; getAnnotatedFields(Class&lt;? extends Annotation&gt; annotationClass) {</b>
+&nbsp;        return Collections.unmodifiableList(getAnnotatedMembers(this.fieldsForAnnotations, annotationClass, false));
+&nbsp;    }
+&nbsp;
+&nbsp;    private &lt;T&gt; List&lt;T&gt; collectValues(Map&lt;?, List&lt;T&gt;&gt; map) {
+&nbsp;        Set&lt;T&gt; values = new LinkedHashSet();
+&nbsp;        Iterator i$ = map.values().iterator();
+&nbsp;
+&nbsp;        while(i$.hasNext()) {
+&nbsp;            List&lt;T&gt; additionalValues = (List)i$.next();
+<b class="fc">&nbsp;            values.addAll(additionalValues);</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        return new ArrayList(values);
+&nbsp;    }
+&nbsp;
+&nbsp;    private static &lt;T&gt; List&lt;T&gt; getAnnotatedMembers(Map&lt;Class&lt;? extends Annotation&gt;, List&lt;T&gt;&gt; map, Class&lt;? extends Annotation&gt; type, boolean fillIfAbsent) {
+&nbsp;        if (!map.containsKey(type) &amp;&amp; fillIfAbsent) {
+&nbsp;            map.put(type, new ArrayList());
+<b class="fc">&nbsp;        }</b>
+&nbsp;
+&nbsp;        List&lt;T&gt; members = (List)map.get(type);
+&nbsp;        return members == null ? Collections.emptyList() : members;
+<b class="fc">&nbsp;    }</b>
+<b class="fc">&nbsp;</b>
+<b class="fc">&nbsp;    private static boolean runsTopToBottom(Class&lt;? extends Annotation&gt; annotation) {</b>
+&nbsp;        return annotation.equals(Before.class) || annotation.equals(BeforeClass.class);
+<b class="fc">&nbsp;    }</b>
+&nbsp;
+&nbsp;    private static List&lt;Class&lt;?&gt;&gt; getSuperClasses(Class&lt;?&gt; testClass) {
+&nbsp;        List&lt;Class&lt;?&gt;&gt; results = new ArrayList();
+&nbsp;
+<b class="fc">&nbsp;        for(Class&lt;?&gt; current = testClass; current != null; current = current.getSuperclass()) {</b>
+<b class="fc">&nbsp;            results.add(current);</b>
+&nbsp;        }
+<b class="fc">&nbsp;</b>
+<b class="fc">&nbsp;        return results;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public Class&lt;?&gt; getJavaClass() {
+<b class="pc">&nbsp;        return this.clazz;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public String getName() {
+&nbsp;        return this.clazz == null ? &quot;null&quot; : this.clazz.getName();
+<b class="fc">&nbsp;    }</b>
+<b class="fc">&nbsp;</b>
+<b class="fc">&nbsp;    public Constructor&lt;?&gt; getOnlyConstructor() {</b>
+<b class="fc">&nbsp;        Constructor&lt;?&gt;[] constructors = this.clazz.getConstructors();</b>
+<b class="fc">&nbsp;        Assert.assertEquals(1L, (long)constructors.length);</b>
+&nbsp;        return constructors[0];
+<b class="fc">&nbsp;    }</b>
+&nbsp;
+&nbsp;    public Annotation[] getAnnotations() {
+&nbsp;        return this.clazz == null ? new Annotation[0] : this.clazz.getAnnotations();
+&nbsp;    }
+&nbsp;
+&nbsp;    public &lt;T extends Annotation&gt; T getAnnotation(Class&lt;T&gt; annotationType) {
+<b class="fc">&nbsp;        return this.clazz == null ? null : this.clazz.getAnnotation(annotationType);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public &lt;T&gt; List&lt;T&gt; getAnnotatedFieldValues(Object test, Class&lt;? extends Annotation&gt; annotationClass, Class&lt;T&gt; valueClass) {
+&nbsp;        final List&lt;T&gt; results = new ArrayList();
+&nbsp;        this.collectAnnotatedFieldValues(test, annotationClass, valueClass, new MemberValueConsumer&lt;T&gt;() {
+&nbsp;            public void accept(FrameworkMember&lt;?&gt; member, T value) {
+<b class="pc">&nbsp;                results.add(value);</b>
+<b class="nc">&nbsp;            }</b>
+&nbsp;        });
+<b class="fc">&nbsp;        return results;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public &lt;T&gt; void collectAnnotatedFieldValues(Object test, Class&lt;? extends Annotation&gt; annotationClass, Class&lt;T&gt; valueClass, MemberValueConsumer&lt;T&gt; consumer) {
+&nbsp;        Iterator i$ = this.getAnnotatedFields(annotationClass).iterator();
+&nbsp;
+&nbsp;        while(i$.hasNext()) {
+&nbsp;            FrameworkField each = (FrameworkField)i$.next();
+&nbsp;
+<b class="fc">&nbsp;            try {</b>
+<b class="fc">&nbsp;                Object fieldValue = each.get(test);</b>
+<b class="fc">&nbsp;                if (valueClass.isInstance(fieldValue)) {</b>
+&nbsp;                    consumer.accept(each, valueClass.cast(fieldValue));
+&nbsp;                }
+&nbsp;            } catch (IllegalAccessException var8) {
+&nbsp;                throw new RuntimeException(&quot;How did getFields return a field we couldn&#39;t access?&quot;, var8);
+&nbsp;            }
+&nbsp;        }
+<b class="pc">&nbsp;</b>
+<b class="nc">&nbsp;    }</b>
+&nbsp;
+<b class="fc">&nbsp;    public &lt;T&gt; List&lt;T&gt; getAnnotatedMethodValues(Object test, Class&lt;? extends Annotation&gt; annotationClass, Class&lt;T&gt; valueClass) {</b>
+&nbsp;        final List&lt;T&gt; results = new ArrayList();
+&nbsp;        this.collectAnnotatedMethodValues(test, annotationClass, valueClass, new MemberValueConsumer&lt;T&gt;() {
+&nbsp;            public void accept(FrameworkMember&lt;?&gt; member, T value) {
+<b class="nc">&nbsp;                results.add(value);</b>
+<b class="nc">&nbsp;            }</b>
+&nbsp;        });
+<b class="nc">&nbsp;        return results;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public &lt;T&gt; void collectAnnotatedMethodValues(Object test, Class&lt;? extends Annotation&gt; annotationClass, Class&lt;T&gt; valueClass, MemberValueConsumer&lt;T&gt; consumer) {
+&nbsp;        Iterator i$ = this.getAnnotatedMethods(annotationClass).iterator();
+<b class="nc">&nbsp;</b>
+<b class="nc">&nbsp;        while(i$.hasNext()) {</b>
+&nbsp;            FrameworkMethod each = (FrameworkMethod)i$.next();
+&nbsp;
+&nbsp;            try {
+&nbsp;                if (valueClass.isAssignableFrom(each.getReturnType())) {
+&nbsp;                    Object fieldValue = each.invokeExplosively(test, new Object[0]);
+<b class="nc">&nbsp;                    consumer.accept(each, valueClass.cast(fieldValue));</b>
+&nbsp;                }
+&nbsp;            } catch (Throwable var8) {
+&nbsp;                throw new RuntimeException(&quot;Exception in &quot; + each.getName(), var8);
+&nbsp;            }
+&nbsp;        }
+&nbsp;
+&nbsp;    }
+&nbsp;
+&nbsp;    public boolean isPublic() {
+&nbsp;        return Modifier.isPublic(this.clazz.getModifiers());
+&nbsp;    }
+<b class="pc">&nbsp;</b>
+&nbsp;    public boolean isANonStaticInnerClass() {
+<b class="nc">&nbsp;        return this.clazz.isMemberClass() &amp;&amp; !Modifier.isStatic(this.clazz.getModifiers());</b>
+<b class="nc">&nbsp;    }</b>
+<b class="nc">&nbsp;</b>
+&nbsp;    public int hashCode() {
+<b class="nc">&nbsp;        return this.clazz == null ? 0 : this.clazz.hashCode();</b>
+<b class="nc">&nbsp;    }</b>
+&nbsp;
+<b class="nc">&nbsp;    public boolean equals(Object obj) {</b>
+&nbsp;        if (this == obj) {
+&nbsp;            return true;
+&nbsp;        } else if (obj == null) {
+&nbsp;            return false;
+&nbsp;        } else if (this.getClass() != obj.getClass()) {
+<b class="nc">&nbsp;            return false;</b>
+<b class="nc">&nbsp;        } else {</b>
+&nbsp;            TestClass other = (TestClass)obj;
+&nbsp;            return this.clazz == other.clazz;
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+<b class="nc">&nbsp;    private static class MethodComparator implements Comparator&lt;FrameworkMethod&gt; {</b>
+&nbsp;        private MethodComparator() {
+&nbsp;        }
+&nbsp;
+&nbsp;        public int compare(FrameworkMethod left, FrameworkMethod right) {
+&nbsp;            return MethodSorter.NAME_ASCENDING.compare(left.getMethod(), right.getMethod());
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    private static class FieldComparator implements Comparator&lt;Field&gt; {
+&nbsp;        private FieldComparator() {
+&nbsp;        }
+<b class="pc">&nbsp;</b>
+&nbsp;        public int compare(Field left, Field right) {
+&nbsp;            return left.getName().compareTo(right.getName());
+&nbsp;        }
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-06-03 22:56</div>
+</div>
+</body>
+</html>

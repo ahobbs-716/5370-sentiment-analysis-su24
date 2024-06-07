@@ -1,5 +1,7 @@
+import java.util.List;
+import java.util.Set;
 
-/** 
+/**
  * @author Chris Murphy
  *
  * This class represents a single sentence from the input file.
@@ -32,5 +34,33 @@ public class Sentence {
 		return text;
 	}
 
-	
+	public String[] getWords() {
+		return getText().split(" ");
+	}
+
+	@Override
+	public int hashCode() {
+		return (getScore() + getText()).hashCode();
+	}
+
+	@Override
+	public boolean equals(Object object) {
+
+		if (!(object instanceof Sentence)) {
+			return false;
+		}
+
+		Sentence that = (Sentence) object;
+
+		if (this == object) {
+			return true;
+		}
+
+		if (this.getScore() == that.getScore() && this.getText().equals(that.getText())) {
+			return true;
+		}
+
+		return false;
+	}
+
 }

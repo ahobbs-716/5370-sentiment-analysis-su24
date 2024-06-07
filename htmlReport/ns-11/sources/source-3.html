@@ -1,0 +1,351 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=windows-1252"> 
+  <title>Coverage Report > FailOnTimeout</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">org.junit.internal.runners.statements</a>
+</div>
+
+<h1>Coverage Summary for Class: FailOnTimeout (org.junit.internal.runners.statements)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">FailOnTimeout</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/11)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/28)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/77)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;//
+&nbsp;// Source code recreated from a .class file by IntelliJ IDEA
+&nbsp;// (powered by FernFlower decompiler)
+&nbsp;//
+&nbsp;
+&nbsp;package org.junit.internal.runners.statements;
+&nbsp;
+&nbsp;import java.lang.Thread.State;
+&nbsp;import java.util.Arrays;
+&nbsp;import java.util.Collections;
+&nbsp;import java.util.Iterator;
+&nbsp;import java.util.List;
+&nbsp;import java.util.concurrent.Callable;
+&nbsp;import java.util.concurrent.CountDownLatch;
+&nbsp;import java.util.concurrent.ExecutionException;
+&nbsp;import java.util.concurrent.FutureTask;
+&nbsp;import java.util.concurrent.TimeUnit;
+&nbsp;import java.util.concurrent.TimeoutException;
+<b class="nc">&nbsp;import org.junit.internal.management.ManagementFactory;</b>
+&nbsp;import org.junit.internal.management.ThreadMXBean;
+&nbsp;import org.junit.runners.model.MultipleFailureException;
+&nbsp;import org.junit.runners.model.Statement;
+&nbsp;import org.junit.runners.model.TestTimedOutException;
+&nbsp;
+&nbsp;public class FailOnTimeout extends Statement {
+&nbsp;    private final Statement originalStatement;
+&nbsp;    private final TimeUnit timeUnit;
+&nbsp;    private final long timeout;
+&nbsp;    private final boolean lookForStuckThread;
+&nbsp;
+<b class="nc">&nbsp;    public static Builder builder() {</b>
+&nbsp;        return new Builder();
+&nbsp;    }
+&nbsp;
+&nbsp;    /** @deprecated */
+&nbsp;    @Deprecated
+&nbsp;    public FailOnTimeout(Statement statement, long timeoutMillis) {
+&nbsp;        this(builder().withTimeout(timeoutMillis, TimeUnit.MILLISECONDS), statement);
+&nbsp;    }
+&nbsp;
+&nbsp;    private FailOnTimeout(Builder builder, Statement statement) {
+&nbsp;        this.originalStatement = statement;
+<b class="nc">&nbsp;        this.timeout = builder.timeout;</b>
+&nbsp;        this.timeUnit = builder.unit;
+&nbsp;        this.lookForStuckThread = builder.lookForStuckThread;
+<b class="nc">&nbsp;    }</b>
+<b class="nc">&nbsp;</b>
+<b class="nc">&nbsp;    public void evaluate() throws Throwable {</b>
+<b class="nc">&nbsp;        CallableStatement callable = new CallableStatement();</b>
+<b class="nc">&nbsp;        FutureTask&lt;Throwable&gt; task = new FutureTask(callable);</b>
+&nbsp;        ThreadGroup threadGroup = new ThreadGroup(&quot;FailOnTimeoutGroup&quot;);
+&nbsp;        Thread thread = new Thread(threadGroup, task, &quot;Time-limited test&quot;);
+&nbsp;
+&nbsp;        try {
+&nbsp;            thread.setDaemon(true);
+&nbsp;            thread.start();
+&nbsp;            callable.awaitStarted();
+&nbsp;            Throwable throwable = this.getResult(task, thread);
+&nbsp;            if (throwable != null) {
+&nbsp;                throw throwable;
+&nbsp;            }
+&nbsp;        } finally {
+&nbsp;            try {
+&nbsp;                thread.join(1L);
+&nbsp;            } catch (InterruptedException var14) {
+&nbsp;                Thread.currentThread().interrupt();
+&nbsp;            }
+&nbsp;
+&nbsp;            try {
+&nbsp;                threadGroup.destroy();
+&nbsp;            } catch (IllegalThreadStateException var13) {
+&nbsp;            }
+&nbsp;
+&nbsp;        }
+&nbsp;
+&nbsp;    }
+&nbsp;
+&nbsp;    private Throwable getResult(FutureTask&lt;Throwable&gt; task, Thread thread) {
+&nbsp;        try {
+&nbsp;            return this.timeout &gt; 0L ? (Throwable)task.get(this.timeout, this.timeUnit) : (Throwable)task.get();
+&nbsp;        } catch (InterruptedException var4) {
+&nbsp;            return var4;
+&nbsp;        } catch (ExecutionException var5) {
+&nbsp;            return var5.getCause();
+&nbsp;        } catch (TimeoutException var6) {
+&nbsp;            return this.createTimeoutException(thread);
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    private Exception createTimeoutException(Thread thread) {
+&nbsp;        StackTraceElement[] stackTrace = thread.getStackTrace();
+&nbsp;        Thread stuckThread = this.lookForStuckThread ? this.getStuckThread(thread) : null;
+&nbsp;        Exception currThreadException = new TestTimedOutException(this.timeout, this.timeUnit);
+&nbsp;        if (stackTrace != null) {
+&nbsp;            currThreadException.setStackTrace(stackTrace);
+&nbsp;            thread.interrupt();
+&nbsp;        }
+&nbsp;
+&nbsp;        if (stuckThread != null) {
+&nbsp;            Exception stuckThreadException = new Exception(&quot;Appears to be stuck in thread &quot; + stuckThread.getName());
+&nbsp;            stuckThreadException.setStackTrace(this.getStackTrace(stuckThread));
+&nbsp;            return new MultipleFailureException(Arrays.asList(currThreadException, stuckThreadException));
+&nbsp;        } else {
+&nbsp;            return currThreadException;
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    private StackTraceElement[] getStackTrace(Thread thread) {
+&nbsp;        try {
+&nbsp;            return thread.getStackTrace();
+&nbsp;        } catch (SecurityException var3) {
+&nbsp;            return new StackTraceElement[0];
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    private Thread getStuckThread(Thread mainThread) {
+&nbsp;        List&lt;Thread&gt; threadsInGroup = this.getThreadsInGroup(mainThread.getThreadGroup());
+&nbsp;        if (threadsInGroup.isEmpty()) {
+&nbsp;            return null;
+&nbsp;        } else {
+<b class="nc">&nbsp;            Thread stuckThread = null;</b>
+<b class="nc">&nbsp;            long maxCpuTime = 0L;</b>
+<b class="nc">&nbsp;            Iterator i$ = threadsInGroup.iterator();</b>
+<b class="nc">&nbsp;</b>
+&nbsp;            while(true) {
+<b class="nc">&nbsp;                Thread thread;</b>
+<b class="nc">&nbsp;                long threadCpuTime;</b>
+<b class="nc">&nbsp;                do {</b>
+<b class="nc">&nbsp;                    do {</b>
+<b class="nc">&nbsp;                        if (!i$.hasNext()) {</b>
+<b class="nc">&nbsp;                            return stuckThread == mainThread ? null : stuckThread;</b>
+&nbsp;                        }
+&nbsp;
+<b class="nc">&nbsp;                        thread = (Thread)i$.next();</b>
+<b class="nc">&nbsp;                    } while(thread.getState() != State.RUNNABLE);</b>
+<b class="nc">&nbsp;</b>
+<b class="nc">&nbsp;                    threadCpuTime = this.cpuTime(thread);</b>
+<b class="nc">&nbsp;                } while(stuckThread != null &amp;&amp; threadCpuTime &lt;= maxCpuTime);</b>
+&nbsp;
+<b class="nc">&nbsp;                stuckThread = thread;</b>
+<b class="nc">&nbsp;                maxCpuTime = threadCpuTime;</b>
+&nbsp;            }
+&nbsp;        }
+<b class="nc">&nbsp;    }</b>
+<b class="nc">&nbsp;</b>
+&nbsp;    private List&lt;Thread&gt; getThreadsInGroup(ThreadGroup group) {
+&nbsp;        int activeThreadCount = group.activeCount();
+&nbsp;        int threadArraySize = Math.max(activeThreadCount * 2, 100);
+&nbsp;
+&nbsp;        for(int loopCount = 0; loopCount &lt; 5; ++loopCount) {
+&nbsp;            Thread[] threads = new Thread[threadArraySize];
+&nbsp;            int enumCount = group.enumerate(threads);
+&nbsp;            if (enumCount &lt; threadArraySize) {
+&nbsp;                return Arrays.asList(threads).subList(0, enumCount);
+<b class="nc">&nbsp;            }</b>
+<b class="nc">&nbsp;</b>
+&nbsp;            threadArraySize += 100;
+<b class="nc">&nbsp;        }</b>
+&nbsp;
+<b class="nc">&nbsp;        return Collections.emptyList();</b>
+<b class="nc">&nbsp;    }</b>
+<b class="nc">&nbsp;</b>
+&nbsp;    private long cpuTime(Thread thr) {
+<b class="nc">&nbsp;        ThreadMXBean mxBean = ManagementFactory.getThreadMXBean();</b>
+<b class="nc">&nbsp;        if (mxBean.isThreadCpuTimeSupported()) {</b>
+<b class="nc">&nbsp;            try {</b>
+&nbsp;                return mxBean.getThreadCpuTime(thr.getId());
+&nbsp;            } catch (UnsupportedOperationException var4) {
+&nbsp;            }
+&nbsp;        }
+<b class="nc">&nbsp;</b>
+<b class="nc">&nbsp;        return 0L;</b>
+<b class="nc">&nbsp;    }</b>
+<b class="nc">&nbsp;</b>
+<b class="nc">&nbsp;    private class CallableStatement implements Callable&lt;Throwable&gt; {</b>
+<b class="nc">&nbsp;        private final CountDownLatch startLatch;</b>
+&nbsp;
+<b class="nc">&nbsp;        private CallableStatement() {</b>
+<b class="nc">&nbsp;            this.startLatch = new CountDownLatch(1);</b>
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        public Throwable call() throws Exception {</b>
+<b class="nc">&nbsp;            try {</b>
+&nbsp;                this.startLatch.countDown();
+&nbsp;                FailOnTimeout.this.originalStatement.evaluate();
+<b class="nc">&nbsp;                return null;</b>
+&nbsp;            } catch (Exception var2) {
+&nbsp;                throw var2;
+&nbsp;            } catch (Throwable var3) {
+&nbsp;                return var3;
+&nbsp;            }
+&nbsp;        }
+&nbsp;
+&nbsp;        public void awaitStarted() throws InterruptedException {
+&nbsp;            this.startLatch.await();
+&nbsp;        }
+&nbsp;    }
+<b class="nc">&nbsp;</b>
+<b class="nc">&nbsp;    public static class Builder {</b>
+<b class="nc">&nbsp;        private boolean lookForStuckThread;</b>
+&nbsp;        private long timeout;
+&nbsp;        private TimeUnit unit;
+&nbsp;
+&nbsp;        private Builder() {
+&nbsp;            this.lookForStuckThread = false;
+&nbsp;            this.timeout = 0L;
+&nbsp;            this.unit = TimeUnit.SECONDS;
+&nbsp;        }
+&nbsp;
+&nbsp;        public Builder withTimeout(long timeout, TimeUnit unit) {
+&nbsp;            if (timeout &lt; 0L) {
+&nbsp;                throw new IllegalArgumentException(&quot;timeout must be non-negative&quot;);
+&nbsp;            } else if (unit == null) {
+&nbsp;                throw new NullPointerException(&quot;TimeUnit cannot be null&quot;);
+<b class="nc">&nbsp;            } else {</b>
+<b class="nc">&nbsp;                this.timeout = timeout;</b>
+<b class="nc">&nbsp;                this.unit = unit;</b>
+&nbsp;                return this;
+&nbsp;            }
+&nbsp;        }
+&nbsp;
+&nbsp;        public Builder withLookingForStuckThread(boolean enable) {
+&nbsp;            this.lookForStuckThread = enable;
+&nbsp;            return this;
+<b class="nc">&nbsp;        }</b>
+<b class="nc">&nbsp;</b>
+<b class="nc">&nbsp;        public FailOnTimeout build(Statement statement) {</b>
+<b class="nc">&nbsp;            if (statement == null) {</b>
+<b class="nc">&nbsp;                throw new NullPointerException(&quot;statement cannot be null&quot;);</b>
+<b class="nc">&nbsp;            } else {</b>
+<b class="nc">&nbsp;                return new FailOnTimeout(this, statement);</b>
+<b class="nc">&nbsp;            }</b>
+&nbsp;        }
+<b class="nc">&nbsp;    }</b>
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-06-04 11:14</div>
+</div>
+</body>
+</html>

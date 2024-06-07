@@ -1,0 +1,337 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=windows-1252"> 
+  <title>Coverage Report > AnnotationsValidator</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">org.junit.validator</a>
+</div>
+
+<h1>Coverage Summary for Class: AnnotationsValidator (org.junit.validator)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">AnnotationsValidator</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (3/3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (2/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (8/8)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">AnnotationsValidator$AnnotatableValidator</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (4/4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    83.3%
+  </span>
+  <span class="absValue">
+    (5/6)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    82.4%
+  </span>
+  <span class="absValue">
+    (14/17)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">AnnotationsValidator$ClassValidator</td>
+<td class="coverageStat">
+  <span class="percent">
+    66.7%
+  </span>
+  <span class="absValue">
+    (2/3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    66.7%
+  </span>
+  <span class="absValue">
+    (2/3)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">AnnotationsValidator$FieldValidator</td>
+<td class="coverageStat">
+  <span class="percent">
+    66.7%
+  </span>
+  <span class="absValue">
+    (2/3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    66.7%
+  </span>
+  <span class="absValue">
+    (2/3)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">AnnotationsValidator$MethodValidator</td>
+<td class="coverageStat">
+  <span class="percent">
+    66.7%
+  </span>
+  <span class="absValue">
+    (2/3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    66.7%
+  </span>
+  <span class="absValue">
+    (2/3)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    81.2%
+  </span>
+  <span class="absValue">
+    (13/16)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    87.5%
+  </span>
+  <span class="absValue">
+    (7/8)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    82.4%
+  </span>
+  <span class="absValue">
+    (28/34)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;//
+&nbsp;// Source code recreated from a .class file by IntelliJ IDEA
+&nbsp;// (powered by FernFlower decompiler)
+&nbsp;//
+&nbsp;
+&nbsp;package org.junit.validator;
+&nbsp;
+&nbsp;import java.lang.annotation.Annotation;
+&nbsp;import java.util.ArrayList;
+&nbsp;import java.util.Arrays;
+&nbsp;import java.util.Collections;
+&nbsp;import java.util.Iterator;
+&nbsp;import java.util.List;
+&nbsp;import org.junit.runners.model.Annotatable;
+&nbsp;import org.junit.runners.model.FrameworkField;
+&nbsp;import org.junit.runners.model.FrameworkMethod;
+&nbsp;import org.junit.runners.model.TestClass;
+&nbsp;
+&nbsp;public final class AnnotationsValidator implements TestClassValidator {
+&nbsp;    private static final List&lt;AnnotatableValidator&lt;?&gt;&gt; VALIDATORS = Arrays.asList(new ClassValidator(), new MethodValidator(), new FieldValidator());
+<b class="fc">&nbsp;</b>
+<b class="fc">&nbsp;    public AnnotationsValidator() {</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public List&lt;Exception&gt; validateTestClass(TestClass testClass) {
+&nbsp;        List&lt;Exception&gt; validationErrors = new ArrayList();
+&nbsp;        Iterator i$ = VALIDATORS.iterator();
+&nbsp;
+&nbsp;        while(i$.hasNext()) {
+&nbsp;            AnnotatableValidator&lt;?&gt; validator = (AnnotatableValidator)i$.next();
+&nbsp;            List&lt;Exception&gt; additionalErrors = validator.validateTestClass(testClass);
+&nbsp;            validationErrors.addAll(additionalErrors);
+&nbsp;        }
+<b class="fc">&nbsp;</b>
+<b class="fc">&nbsp;        return validationErrors;</b>
+<b class="fc">&nbsp;    }</b>
+&nbsp;
+<b class="fc">&nbsp;    private static class FieldValidator extends AnnotatableValidator&lt;FrameworkField&gt; {</b>
+<b class="fc">&nbsp;        private FieldValidator() {</b>
+<b class="fc">&nbsp;            super(null);</b>
+&nbsp;        }
+&nbsp;
+<b class="fc">&nbsp;        Iterable&lt;FrameworkField&gt; getAnnotatablesForTestClass(TestClass testClass) {</b>
+<b class="fc">&nbsp;            return testClass.getAnnotatedFields();</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        List&lt;Exception&gt; validateAnnotatable(AnnotationValidator validator, FrameworkField field) {
+&nbsp;            return validator.validateAnnotatedField(field);
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+<b class="fc">&nbsp;    private static class MethodValidator extends AnnotatableValidator&lt;FrameworkMethod&gt; {</b>
+<b class="fc">&nbsp;        private MethodValidator() {</b>
+<b class="fc">&nbsp;            super(null);</b>
+<b class="fc">&nbsp;        }</b>
+<b class="fc">&nbsp;</b>
+<b class="fc">&nbsp;        Iterable&lt;FrameworkMethod&gt; getAnnotatablesForTestClass(TestClass testClass) {</b>
+&nbsp;            return testClass.getAnnotatedMethods();
+&nbsp;        }
+&nbsp;
+<b class="fc">&nbsp;        List&lt;Exception&gt; validateAnnotatable(AnnotationValidator validator, FrameworkMethod method) {</b>
+<b class="fc">&nbsp;            return validator.validateAnnotatedMethod(method);</b>
+<b class="fc">&nbsp;        }</b>
+&nbsp;    }
+<b class="fc">&nbsp;</b>
+&nbsp;    private static class ClassValidator extends AnnotatableValidator&lt;TestClass&gt; {
+<b class="pc">&nbsp;        private ClassValidator() {</b>
+<b class="nc">&nbsp;            super(null);</b>
+&nbsp;        }
+<b class="nc">&nbsp;</b>
+&nbsp;        Iterable&lt;TestClass&gt; getAnnotatablesForTestClass(TestClass testClass) {
+<b class="nc">&nbsp;            return Collections.singletonList(testClass);</b>
+&nbsp;        }
+&nbsp;
+<b class="fc">&nbsp;        List&lt;Exception&gt; validateAnnotatable(AnnotationValidator validator, TestClass testClass) {</b>
+&nbsp;            return validator.validateAnnotatedClass(testClass);
+&nbsp;        }
+&nbsp;    }
+<b class="fc">&nbsp;</b>
+&nbsp;    private abstract static class AnnotatableValidator&lt;T extends Annotatable&gt; {
+&nbsp;        private static final AnnotationValidatorFactory ANNOTATION_VALIDATOR_FACTORY = new AnnotationValidatorFactory();
+<b class="fc">&nbsp;</b>
+&nbsp;        private AnnotatableValidator() {
+&nbsp;        }
+&nbsp;
+&nbsp;        abstract Iterable&lt;T&gt; getAnnotatablesForTestClass(TestClass var1);
+&nbsp;
+<b class="nc">&nbsp;        abstract List&lt;Exception&gt; validateAnnotatable(AnnotationValidator var1, T var2);</b>
+&nbsp;
+&nbsp;        public List&lt;Exception&gt; validateTestClass(TestClass testClass) {
+&nbsp;            List&lt;Exception&gt; validationErrors = new ArrayList();
+<b class="fc">&nbsp;            Iterator i$ = this.getAnnotatablesForTestClass(testClass).iterator();</b>
+&nbsp;
+&nbsp;            while(i$.hasNext()) {
+&nbsp;                T annotatable = (Annotatable)i$.next();
+&nbsp;                List&lt;Exception&gt; additionalErrors = this.validateAnnotatable(annotatable);
+<b class="fc">&nbsp;                validationErrors.addAll(additionalErrors);</b>
+&nbsp;            }
+&nbsp;
+&nbsp;            return validationErrors;
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        private List&lt;Exception&gt; validateAnnotatable(T annotatable) {</b>
+&nbsp;            List&lt;Exception&gt; validationErrors = new ArrayList();
+&nbsp;            Annotation[] arr$ = annotatable.getAnnotations();
+&nbsp;            int len$ = arr$.length;
+<b class="fc">&nbsp;</b>
+&nbsp;            for(int i$ = 0; i$ &lt; len$; ++i$) {
+&nbsp;                Annotation annotation = arr$[i$];
+&nbsp;                Class&lt;? extends Annotation&gt; annotationType = annotation.annotationType();
+<b class="fc">&nbsp;                ValidateWith validateWith = (ValidateWith)annotationType.getAnnotation(ValidateWith.class);</b>
+&nbsp;                if (validateWith != null) {
+&nbsp;                    AnnotationValidator annotationValidator = ANNOTATION_VALIDATOR_FACTORY.createAnnotationValidator(validateWith);
+&nbsp;                    List&lt;Exception&gt; errors = this.validateAnnotatable(annotationValidator, annotatable);
+&nbsp;                    validationErrors.addAll(errors);
+&nbsp;                }
+<b class="nc">&nbsp;            }</b>
+&nbsp;
+&nbsp;            return validationErrors;
+&nbsp;        }
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-06-04 11:14</div>
+</div>
+</body>
+</html>

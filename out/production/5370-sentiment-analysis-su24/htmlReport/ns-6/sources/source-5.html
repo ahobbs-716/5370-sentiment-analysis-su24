@@ -1,0 +1,244 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=windows-1252"> 
+  <title>Coverage Report > TestResult</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">junit.framework</a>
+</div>
+
+<h1>Coverage Summary for Class: TestResult (junit.framework)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">TestResult</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/18)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/45)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;//
+&nbsp;// Source code recreated from a .class file by IntelliJ IDEA
+&nbsp;// (powered by FernFlower decompiler)
+&nbsp;//
+&nbsp;
+&nbsp;package junit.framework;
+&nbsp;
+&nbsp;import java.util.ArrayList;
+&nbsp;import java.util.Collections;
+&nbsp;import java.util.Enumeration;
+&nbsp;import java.util.Iterator;
+&nbsp;import java.util.List;
+&nbsp;
+&nbsp;public class TestResult {
+&nbsp;    protected List&lt;TestFailure&gt; fFailures = new ArrayList();
+&nbsp;    protected List&lt;TestFailure&gt; fErrors = new ArrayList();
+&nbsp;    protected List&lt;TestListener&gt; fListeners = new ArrayList();
+&nbsp;    protected int fRunTests = 0;
+&nbsp;    private boolean fStop = false;
+&nbsp;
+&nbsp;    public TestResult() {
+&nbsp;    }
+&nbsp;
+<b class="nc">&nbsp;    public synchronized void addError(Test test, Throwable e) {</b>
+<b class="nc">&nbsp;        this.fErrors.add(new TestFailure(test, e));</b>
+<b class="nc">&nbsp;        Iterator i$ = this.cloneListeners().iterator();</b>
+<b class="nc">&nbsp;</b>
+<b class="nc">&nbsp;        while(i$.hasNext()) {</b>
+<b class="nc">&nbsp;            TestListener each = (TestListener)i$.next();</b>
+&nbsp;            each.addError(test, e);
+&nbsp;        }
+&nbsp;
+&nbsp;    }
+&nbsp;
+&nbsp;    public synchronized void addFailure(Test test, AssertionFailedError e) {
+&nbsp;        this.fFailures.add(new TestFailure(test, e));
+<b class="nc">&nbsp;        Iterator i$ = this.cloneListeners().iterator();</b>
+<b class="nc">&nbsp;</b>
+<b class="nc">&nbsp;        while(i$.hasNext()) {</b>
+&nbsp;            TestListener each = (TestListener)i$.next();
+&nbsp;            each.addFailure(test, e);
+&nbsp;        }
+&nbsp;
+&nbsp;    }
+&nbsp;
+&nbsp;    public synchronized void addListener(TestListener listener) {
+&nbsp;        this.fListeners.add(listener);
+<b class="nc">&nbsp;    }</b>
+<b class="nc">&nbsp;</b>
+<b class="nc">&nbsp;    public synchronized void removeListener(TestListener listener) {</b>
+&nbsp;        this.fListeners.remove(listener);
+&nbsp;    }
+&nbsp;
+&nbsp;    private synchronized List&lt;TestListener&gt; cloneListeners() {
+&nbsp;        List&lt;TestListener&gt; result = new ArrayList();
+&nbsp;        result.addAll(this.fListeners);
+&nbsp;        return result;
+<b class="nc">&nbsp;    }</b>
+&nbsp;
+&nbsp;    public void endTest(Test test) {
+&nbsp;        Iterator i$ = this.cloneListeners().iterator();
+&nbsp;
+&nbsp;        while(i$.hasNext()) {
+&nbsp;            TestListener each = (TestListener)i$.next();
+<b class="nc">&nbsp;            each.endTest(test);</b>
+&nbsp;        }
+&nbsp;
+&nbsp;    }
+&nbsp;
+&nbsp;    public synchronized int errorCount() {
+&nbsp;        return this.fErrors.size();
+<b class="nc">&nbsp;    }</b>
+<b class="nc">&nbsp;</b>
+<b class="nc">&nbsp;    public synchronized Enumeration&lt;TestFailure&gt; errors() {</b>
+&nbsp;        return Collections.enumeration(this.fErrors);
+&nbsp;    }
+&nbsp;
+&nbsp;    public synchronized int failureCount() {
+&nbsp;        return this.fFailures.size();
+&nbsp;    }
+<b class="nc">&nbsp;</b>
+<b class="nc">&nbsp;    public synchronized Enumeration&lt;TestFailure&gt; failures() {</b>
+&nbsp;        return Collections.enumeration(this.fFailures);
+&nbsp;    }
+&nbsp;
+&nbsp;    protected void run(final TestCase test) {
+&nbsp;        this.startTest(test);
+&nbsp;        Protectable p = new Protectable() {
+&nbsp;            public void protect() throws Throwable {
+<b class="nc">&nbsp;                test.runBare();</b>
+&nbsp;            }
+&nbsp;        };
+&nbsp;        this.runProtected(test, p);
+&nbsp;        this.endTest(test);
+&nbsp;    }
+&nbsp;
+<b class="nc">&nbsp;    public synchronized int runCount() {</b>
+&nbsp;        return this.fRunTests;
+&nbsp;    }
+&nbsp;
+&nbsp;    public void runProtected(Test test, Protectable p) {
+&nbsp;        try {
+&nbsp;            p.protect();
+&nbsp;        } catch (AssertionFailedError var4) {
+<b class="nc">&nbsp;            this.addFailure(test, var4);</b>
+&nbsp;        } catch (ThreadDeath var5) {
+&nbsp;            throw var5;
+&nbsp;        } catch (Throwable var6) {
+&nbsp;            this.addError(test, var6);
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;    }</b>
+&nbsp;
+&nbsp;    public synchronized boolean shouldStop() {
+&nbsp;        return this.fStop;
+&nbsp;    }
+&nbsp;
+&nbsp;    public void startTest(Test test) {
+<b class="nc">&nbsp;        int count = test.countTestCases();</b>
+<b class="nc">&nbsp;        synchronized(this) {</b>
+&nbsp;            this.fRunTests += count;
+&nbsp;        }
+&nbsp;
+&nbsp;        Iterator i$ = this.cloneListeners().iterator();
+<b class="nc">&nbsp;</b>
+&nbsp;        while(i$.hasNext()) {
+<b class="nc">&nbsp;            TestListener each = (TestListener)i$.next();</b>
+&nbsp;            each.startTest(test);
+&nbsp;        }
+&nbsp;
+&nbsp;    }
+&nbsp;
+&nbsp;    public synchronized void stop() {
+<b class="nc">&nbsp;        this.fStop = true;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public synchronized boolean wasSuccessful() {
+&nbsp;        return this.failureCount() == 0 &amp;&amp; this.errorCount() == 0;
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-06-04 11:14</div>
+</div>
+</body>
+</html>

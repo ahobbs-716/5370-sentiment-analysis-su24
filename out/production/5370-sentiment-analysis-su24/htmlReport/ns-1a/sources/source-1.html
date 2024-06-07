@@ -1,0 +1,366 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=windows-1252"> 
+  <title>Coverage Report > ExtensionValuesStore</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">org.junit.jupiter.engine.execution</a>
+</div>
+
+<h1>Coverage Summary for Class: ExtensionValuesStore (org.junit.jupiter.engine.execution)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">ExtensionValuesStore</td>
+<td class="coverageStat">
+  <span class="percent">
+    28.6%
+  </span>
+  <span class="absValue">
+    (4/14)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/16)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    28.9%
+  </span>
+  <span class="absValue">
+    (13/45)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">ExtensionValuesStore$StoredValue</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/8)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    22.2%
+  </span>
+  <span class="absValue">
+    (4/18)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/16)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    24.5%
+  </span>
+  <span class="absValue">
+    (13/53)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;//
+&nbsp;// Source code recreated from a .class file by IntelliJ IDEA
+&nbsp;// (powered by FernFlower decompiler)
+&nbsp;//
+&nbsp;
+&nbsp;package org.junit.jupiter.engine.execution;
+&nbsp;
+&nbsp;import java.util.Comparator;
+&nbsp;import java.util.Objects;
+&nbsp;import java.util.Optional;
+&nbsp;import java.util.concurrent.ConcurrentHashMap;
+&nbsp;import java.util.concurrent.ConcurrentMap;
+&nbsp;import java.util.concurrent.atomic.AtomicInteger;
+&nbsp;import java.util.concurrent.locks.Lock;
+&nbsp;import java.util.concurrent.locks.ReentrantLock;
+&nbsp;import java.util.function.Function;
+&nbsp;import java.util.function.Supplier;
+&nbsp;import org.apiguardian.api.API;
+&nbsp;import org.apiguardian.api.API.Status;
+&nbsp;import org.junit.jupiter.api.extension.ExtensionContext;
+&nbsp;import org.junit.jupiter.api.extension.ExtensionContextException;
+&nbsp;import org.junit.jupiter.engine.support.JupiterThrowableCollectorFactory;
+&nbsp;import org.junit.platform.commons.util.ReflectionUtils;
+&nbsp;import org.junit.platform.engine.support.hierarchical.ThrowableCollector;
+&nbsp;
+&nbsp;@API(
+&nbsp;    status = Status.INTERNAL,
+&nbsp;    since = &quot;5.0&quot;
+&nbsp;)
+&nbsp;public class ExtensionValuesStore {
+&nbsp;    private static final Comparator&lt;StoredValue&gt; REVERSE_INSERT_ORDER = Comparator.comparing((it) -&gt; {
+&nbsp;        return it.order;
+&nbsp;    }).reversed();
+&nbsp;    private final AtomicInteger insertOrderSequence = new AtomicInteger();
+&nbsp;    private final ConcurrentMap&lt;CompositeKey, StoredValue&gt; storedValues = new ConcurrentHashMap(4);
+&nbsp;    private final ExtensionValuesStore parentStore;
+&nbsp;
+&nbsp;    public ExtensionValuesStore(ExtensionValuesStore parentStore) {
+&nbsp;        this.parentStore = parentStore;
+&nbsp;    }
+&nbsp;
+&nbsp;    public void closeAllStoredCloseableValues() {
+&nbsp;        ThrowableCollector throwableCollector = JupiterThrowableCollectorFactory.createThrowableCollector();
+&nbsp;        this.storedValues.values().stream().filter((storedValue) -&gt; {
+<b class="fc">&nbsp;            return storedValue.evaluateSafely() instanceof ExtensionContext.Store.CloseableResource;</b>
+<b class="fc">&nbsp;        }).sorted(REVERSE_INSERT_ORDER).map((storedValue) -&gt; {</b>
+&nbsp;            return (ExtensionContext.Store.CloseableResource)storedValue.evaluate();
+<b class="fc">&nbsp;        }).forEach((resource) -&gt; {</b>
+<b class="fc">&nbsp;            Objects.requireNonNull(resource);</b>
+&nbsp;            throwableCollector.execute(resource::close);
+&nbsp;        });
+<b class="fc">&nbsp;        throwableCollector.assertEmpty();</b>
+<b class="fc">&nbsp;    }</b>
+&nbsp;
+&nbsp;    Object get(ExtensionContext.Namespace namespace, Object key) {
+&nbsp;        StoredValue storedValue = this.getStoredValue(new CompositeKey(namespace, key));
+&nbsp;        return storedValue != null ? storedValue.evaluate() : null;
+&nbsp;    }
+&nbsp;
+&nbsp;    &lt;T&gt; T get(ExtensionContext.Namespace namespace, Object key, Class&lt;T&gt; requiredType) {
+&nbsp;        Object value = this.get(namespace, key);
+&nbsp;        return this.castToRequiredType(key, value, requiredType);
+<b class="fc">&nbsp;    }</b>
+<b class="fc">&nbsp;</b>
+<b class="fc">&nbsp;    &lt;K, V&gt; Object getOrComputeIfAbsent(ExtensionContext.Namespace namespace, K key, Function&lt;K, V&gt; defaultCreator) {</b>
+<b class="fc">&nbsp;        CompositeKey compositeKey = new CompositeKey(namespace, key);</b>
+<b class="fc">&nbsp;        StoredValue storedValue = this.getStoredValue(compositeKey);</b>
+<b class="fc">&nbsp;        if (storedValue == null) {</b>
+<b class="fc">&nbsp;            StoredValue newValue = this.storedValue(new MemoizingSupplier(() -&gt; {</b>
+&nbsp;                return defaultCreator.apply(key);
+&nbsp;            }));
+&nbsp;            storedValue = (StoredValue)Optional.ofNullable((StoredValue)this.storedValues.putIfAbsent(compositeKey, newValue)).orElse(newValue);
+<b class="nc">&nbsp;        }</b>
+<b class="nc">&nbsp;</b>
+&nbsp;        return storedValue.evaluate();
+&nbsp;    }
+&nbsp;
+<b class="nc">&nbsp;    &lt;K, V&gt; V getOrComputeIfAbsent(ExtensionContext.Namespace namespace, K key, Function&lt;K, V&gt; defaultCreator, Class&lt;V&gt; requiredType) {</b>
+<b class="nc">&nbsp;        Object value = this.getOrComputeIfAbsent(namespace, key, defaultCreator);</b>
+&nbsp;        return this.castToRequiredType(key, value, requiredType);
+&nbsp;    }
+&nbsp;
+<b class="nc">&nbsp;    void put(ExtensionContext.Namespace namespace, Object key, Object value) {</b>
+<b class="nc">&nbsp;        this.storedValues.put(new CompositeKey(namespace, key), this.storedValue(() -&gt; {</b>
+<b class="nc">&nbsp;            return value;</b>
+<b class="nc">&nbsp;        }));</b>
+<b class="nc">&nbsp;    }</b>
+&nbsp;
+<b class="nc">&nbsp;    private StoredValue storedValue(Supplier&lt;Object&gt; value) {</b>
+&nbsp;        return new StoredValue(this.insertOrderSequence.getAndIncrement(), value);
+&nbsp;    }
+&nbsp;
+<b class="nc">&nbsp;    Object remove(ExtensionContext.Namespace namespace, Object key) {</b>
+<b class="nc">&nbsp;        StoredValue previous = (StoredValue)this.storedValues.remove(new CompositeKey(namespace, key));</b>
+&nbsp;        return previous != null ? previous.evaluate() : null;
+&nbsp;    }
+&nbsp;
+<b class="nc">&nbsp;    &lt;T&gt; T remove(ExtensionContext.Namespace namespace, Object key, Class&lt;T&gt; requiredType) {</b>
+&nbsp;        Object value = this.remove(namespace, key);
+&nbsp;        return this.castToRequiredType(key, value, requiredType);
+&nbsp;    }
+<b class="nc">&nbsp;</b>
+&nbsp;    private StoredValue getStoredValue(CompositeKey compositeKey) {
+&nbsp;        StoredValue storedValue = (StoredValue)this.storedValues.get(compositeKey);
+&nbsp;        if (storedValue != null) {
+<b class="nc">&nbsp;            return storedValue;</b>
+<b class="nc">&nbsp;        } else {</b>
+&nbsp;            return this.parentStore != null ? this.parentStore.getStoredValue(compositeKey) : null;
+&nbsp;        }
+&nbsp;    }
+<b class="nc">&nbsp;</b>
+<b class="nc">&nbsp;    private &lt;T&gt; T castToRequiredType(Object key, Object value, Class&lt;T&gt; requiredType) {</b>
+&nbsp;        if (value == null) {
+&nbsp;            return null;
+&nbsp;        } else if (ReflectionUtils.isAssignableTo(value, requiredType)) {
+<b class="nc">&nbsp;            return requiredType.isPrimitive() ? ReflectionUtils.getWrapperType(requiredType).cast(value) : requiredType.cast(value);</b>
+<b class="nc">&nbsp;        } else {</b>
+<b class="nc">&nbsp;            throw new ExtensionContextException(String.format(&quot;Object stored under key [%s] is not of required type [%s]&quot;, key, requiredType.getName()));</b>
+&nbsp;        }
+<b class="nc">&nbsp;    }</b>
+<b class="nc">&nbsp;</b>
+&nbsp;    private static class CompositeKey {
+<b class="nc">&nbsp;        private final ExtensionContext.Namespace namespace;</b>
+&nbsp;        private final Object key;
+&nbsp;
+&nbsp;        private CompositeKey(ExtensionContext.Namespace namespace, Object key) {
+&nbsp;            this.namespace = namespace;
+<b class="nc">&nbsp;            this.key = key;</b>
+<b class="nc">&nbsp;        }</b>
+&nbsp;
+<b class="nc">&nbsp;        public boolean equals(Object o) {</b>
+<b class="nc">&nbsp;            if (this == o) {</b>
+<b class="nc">&nbsp;                return true;</b>
+&nbsp;            } else if (o != null &amp;&amp; this.getClass() == o.getClass()) {
+<b class="nc">&nbsp;                CompositeKey that = (CompositeKey)o;</b>
+&nbsp;                return this.namespace.equals(that.namespace) &amp;&amp; this.key.equals(that.key);
+&nbsp;            } else {
+<b class="nc">&nbsp;                return false;</b>
+<b class="nc">&nbsp;            }</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        public int hashCode() {
+&nbsp;            return Objects.hash(new Object[]{this.namespace, this.key});
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    private static class StoredValue {
+&nbsp;        private final int order;
+&nbsp;        private final Supplier&lt;Object&gt; supplier;
+&nbsp;
+&nbsp;        public StoredValue(int order, Supplier&lt;Object&gt; supplier) {
+&nbsp;            this.order = order;
+&nbsp;            this.supplier = supplier;
+&nbsp;        }
+&nbsp;
+&nbsp;        private Object evaluateSafely() {
+&nbsp;            try {
+&nbsp;                return this.evaluate();
+&nbsp;            } catch (RuntimeException var2) {
+&nbsp;                return null;
+&nbsp;            }
+&nbsp;        }
+&nbsp;
+&nbsp;        private Object evaluate() {
+&nbsp;            return this.supplier.get();
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    private static class MemoizingSupplier implements Supplier&lt;Object&gt; {
+&nbsp;        private static final Object NO_VALUE_SET = new Object();
+<b class="nc">&nbsp;        private final Lock lock;</b>
+&nbsp;        private final Supplier&lt;Object&gt; delegate;
+&nbsp;        private volatile Object value;
+&nbsp;
+&nbsp;        private MemoizingSupplier(Supplier&lt;Object&gt; delegate) {
+<b class="nc">&nbsp;            this.lock = new ReentrantLock();</b>
+<b class="nc">&nbsp;            this.value = NO_VALUE_SET;</b>
+<b class="nc">&nbsp;            this.delegate = delegate;</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        public Object get() {
+&nbsp;            if (this.value == NO_VALUE_SET) {
+<b class="nc">&nbsp;                this.computeValue();</b>
+&nbsp;            }
+<b class="nc">&nbsp;</b>
+<b class="nc">&nbsp;            if (this.value instanceof Failure) {</b>
+&nbsp;                throw ((Failure)this.value).exception;
+&nbsp;            } else {
+&nbsp;                return this.value;
+&nbsp;            }
+<b class="nc">&nbsp;        }</b>
+&nbsp;
+&nbsp;        private void computeValue() {
+&nbsp;            this.lock.lock();
+&nbsp;
+&nbsp;            try {
+&nbsp;                if (this.value == NO_VALUE_SET) {
+&nbsp;                    this.value = this.delegate.get();
+&nbsp;                }
+&nbsp;            } catch (RuntimeException var5) {
+&nbsp;                this.value = new Failure(var5);
+&nbsp;            } finally {
+&nbsp;                this.lock.unlock();
+&nbsp;            }
+&nbsp;
+&nbsp;        }
+&nbsp;
+&nbsp;        private static class Failure {
+&nbsp;            private final RuntimeException exception;
+&nbsp;
+&nbsp;            public Failure(RuntimeException exception) {
+&nbsp;                this.exception = exception;
+&nbsp;            }
+&nbsp;        }
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-06-04 11:14</div>
+</div>
+</body>
+</html>

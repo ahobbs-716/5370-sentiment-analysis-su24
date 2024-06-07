@@ -1,0 +1,196 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=windows-1252"> 
+  <title>Coverage Report > ClassRequest</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">org.junit.internal.requests</a>
+</div>
+
+<h1>Coverage Summary for Class: ClassRequest (org.junit.internal.requests)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">ClassRequest</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (4/4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (6/6)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">ClassRequest$CustomAllDefaultPossibilitiesBuilder</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (2/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (2/2)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">ClassRequest$CustomSuiteMethodBuilder</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (2/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    75%
+  </span>
+  <span class="absValue">
+    (3/4)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (8/8)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    91.7%
+  </span>
+  <span class="absValue">
+    (11/12)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;//
+&nbsp;// Source code recreated from a .class file by IntelliJ IDEA
+&nbsp;// (powered by FernFlower decompiler)
+&nbsp;//
+&nbsp;
+&nbsp;package org.junit.internal.requests;
+&nbsp;
+<b class="fc">&nbsp;import org.junit.internal.builders.AllDefaultPossibilitiesBuilder;</b>
+&nbsp;import org.junit.internal.builders.SuiteMethodBuilder;
+&nbsp;import org.junit.runner.Runner;
+&nbsp;import org.junit.runners.model.RunnerBuilder;
+&nbsp;
+&nbsp;public class ClassRequest extends MemoizingRequest {
+&nbsp;    private final Class&lt;?&gt; fTestClass;
+&nbsp;    private final boolean canUseSuiteMethod;
+&nbsp;
+<b class="fc">&nbsp;    public ClassRequest(Class&lt;?&gt; testClass, boolean canUseSuiteMethod) {</b>
+<b class="fc">&nbsp;        this.fTestClass = testClass;</b>
+<b class="fc">&nbsp;        this.canUseSuiteMethod = canUseSuiteMethod;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public ClassRequest(Class&lt;?&gt; testClass) {
+<b class="fc">&nbsp;        this(testClass, true);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    protected Runner createRunner() {
+&nbsp;        return (new CustomAllDefaultPossibilitiesBuilder()).safeRunnerForClass(this.fTestClass);
+<b class="fc">&nbsp;    }</b>
+&nbsp;
+&nbsp;    private class CustomSuiteMethodBuilder extends SuiteMethodBuilder {
+<b class="fc">&nbsp;        private CustomSuiteMethodBuilder() {</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        public Runner runnerForClass(Class&lt;?&gt; testClass) throws Throwable {
+<b class="fc">&nbsp;            return testClass == ClassRequest.this.fTestClass &amp;&amp; !ClassRequest.this.canUseSuiteMethod ? null : super.runnerForClass(testClass);</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    private class CustomAllDefaultPossibilitiesBuilder extends AllDefaultPossibilitiesBuilder {
+&nbsp;        private CustomAllDefaultPossibilitiesBuilder() {
+&nbsp;        }
+&nbsp;
+&nbsp;        protected RunnerBuilder suiteMethodBuilder() {
+<b class="fc">&nbsp;            return ClassRequest.this.new CustomSuiteMethodBuilder();</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-06-04 11:14</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,5 @@
+20 My number is too large !
+1.7 My number is not an int !
+I am missing a number !
+0
+1 I am correct

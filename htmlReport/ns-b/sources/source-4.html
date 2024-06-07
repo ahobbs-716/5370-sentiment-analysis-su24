@@ -1,0 +1,213 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=windows-1252"> 
+  <title>Coverage Report > TextListener</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">org.junit.internal</a>
+</div>
+
+<h1>Coverage Summary for Class: TextListener (org.junit.internal)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">TextListener</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/12)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/10)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/31)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;//
+&nbsp;// Source code recreated from a .class file by IntelliJ IDEA
+&nbsp;// (powered by FernFlower decompiler)
+&nbsp;//
+&nbsp;
+&nbsp;package org.junit.internal;
+&nbsp;
+&nbsp;import java.io.PrintStream;
+&nbsp;import java.text.NumberFormat;
+&nbsp;import java.util.Iterator;
+&nbsp;import java.util.List;
+&nbsp;import org.junit.runner.Description;
+&nbsp;import org.junit.runner.Result;
+&nbsp;import org.junit.runner.notification.Failure;
+&nbsp;import org.junit.runner.notification.RunListener;
+&nbsp;
+<b class="nc">&nbsp;public class TextListener extends RunListener {</b>
+&nbsp;    private final PrintStream writer;
+&nbsp;
+<b class="nc">&nbsp;    public TextListener(JUnitSystem system) {</b>
+<b class="nc">&nbsp;        this(system.out());</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public TextListener(PrintStream writer) {
+&nbsp;        this.writer = writer;
+<b class="nc">&nbsp;    }</b>
+<b class="nc">&nbsp;</b>
+<b class="nc">&nbsp;    public void testRunFinished(Result result) {</b>
+&nbsp;        this.printHeader(result.getRunTime());
+&nbsp;        this.printFailures(result);
+&nbsp;        this.printFooter(result);
+&nbsp;    }
+<b class="nc">&nbsp;</b>
+&nbsp;    public void testStarted(Description description) {
+&nbsp;        this.writer.append(&#39;.&#39;);
+&nbsp;    }
+&nbsp;
+<b class="nc">&nbsp;    public void testFailure(Failure failure) {</b>
+&nbsp;        this.writer.append(&#39;E&#39;);
+&nbsp;    }
+&nbsp;
+&nbsp;    public void testIgnored(Description description) {
+<b class="nc">&nbsp;        this.writer.append(&#39;I&#39;);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private PrintStream getWriter() {
+&nbsp;        return this.writer;
+&nbsp;    }
+&nbsp;
+&nbsp;    protected void printHeader(long runTime) {
+<b class="nc">&nbsp;        this.getWriter().println();</b>
+&nbsp;        this.getWriter().println(&quot;Time: &quot; + this.elapsedTimeAsString(runTime));
+&nbsp;    }
+&nbsp;
+<b class="nc">&nbsp;    protected void printFailures(Result result) {</b>
+<b class="nc">&nbsp;        List&lt;Failure&gt; failures = result.getFailures();</b>
+&nbsp;        if (!failures.isEmpty()) {
+&nbsp;            if (failures.size() == 1) {
+&nbsp;                this.getWriter().println(&quot;There was &quot; + failures.size() + &quot; failure:&quot;);
+<b class="nc">&nbsp;            } else {</b>
+<b class="nc">&nbsp;                this.getWriter().println(&quot;There were &quot; + failures.size() + &quot; failures:&quot;);</b>
+&nbsp;            }
+&nbsp;
+<b class="nc">&nbsp;            int i = 1;</b>
+<b class="nc">&nbsp;            Iterator i$ = failures.iterator();</b>
+&nbsp;
+<b class="nc">&nbsp;            while(i$.hasNext()) {</b>
+&nbsp;                Failure each = (Failure)i$.next();
+<b class="nc">&nbsp;                this.printFailure(each, &quot;&quot; + i++);</b>
+<b class="nc">&nbsp;            }</b>
+<b class="nc">&nbsp;</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    protected void printFailure(Failure each, String prefix) {
+<b class="nc">&nbsp;        this.getWriter().println(prefix + &quot;) &quot; + each.getTestHeader());</b>
+<b class="nc">&nbsp;        this.getWriter().print(each.getTrimmedTrace());</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    protected void printFooter(Result result) {
+<b class="nc">&nbsp;        if (result.wasSuccessful()) {</b>
+<b class="nc">&nbsp;            this.getWriter().println();</b>
+<b class="nc">&nbsp;            this.getWriter().print(&quot;OK&quot;);</b>
+<b class="nc">&nbsp;            this.getWriter().println(&quot; (&quot; + result.getRunCount() + &quot; test&quot; + (result.getRunCount() == 1 ? &quot;&quot; : &quot;s&quot;) + &quot;)&quot;);</b>
+&nbsp;        } else {
+&nbsp;            this.getWriter().println();
+<b class="nc">&nbsp;            this.getWriter().println(&quot;FAILURES!!!&quot;);</b>
+<b class="nc">&nbsp;            this.getWriter().println(&quot;Tests run: &quot; + result.getRunCount() + &quot;,  Failures: &quot; + result.getFailureCount());</b>
+<b class="nc">&nbsp;        }</b>
+&nbsp;
+<b class="nc">&nbsp;        this.getWriter().println();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    protected String elapsedTimeAsString(long runTime) {
+&nbsp;        return NumberFormat.getInstance().format((double)runTime / 1000.0);
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-06-04 11:14</div>
+</div>
+</body>
+</html>

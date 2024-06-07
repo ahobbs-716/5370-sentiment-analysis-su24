@@ -1,0 +1,273 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=windows-1252"> 
+  <title>Coverage Report > RuleContainer</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">org.junit.runners</a>
+</div>
+
+<h1>Coverage Summary for Class: RuleContainer (org.junit.runners)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">RuleContainer</td>
+<td class="coverageStat">
+  <span class="percent">
+    37.5%
+  </span>
+  <span class="absValue">
+    (3/8)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    14.3%
+  </span>
+  <span class="absValue">
+    (2/14)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    25.9%
+  </span>
+  <span class="absValue">
+    (7/27)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">RuleContainer$1</td>
+<td class="coverageStat">
+  <span class="percent">
+    33.3%
+  </span>
+  <span class="absValue">
+    (1/3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/6)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    25%
+  </span>
+  <span class="absValue">
+    (1/4)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    36.4%
+  </span>
+  <span class="absValue">
+    (4/11)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    10%
+  </span>
+  <span class="absValue">
+    (2/20)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    25.8%
+  </span>
+  <span class="absValue">
+    (8/31)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;//
+&nbsp;// Source code recreated from a .class file by IntelliJ IDEA
+&nbsp;// (powered by FernFlower decompiler)
+&nbsp;//
+&nbsp;
+&nbsp;package org.junit.runners;
+&nbsp;
+&nbsp;import java.util.ArrayList;
+&nbsp;import java.util.Collections;
+&nbsp;import java.util.Comparator;
+&nbsp;import java.util.IdentityHashMap;
+&nbsp;import java.util.Iterator;
+&nbsp;import java.util.List;
+&nbsp;import org.junit.rules.MethodRule;
+&nbsp;import org.junit.rules.TestRule;
+&nbsp;import org.junit.runner.Description;
+&nbsp;import org.junit.runners.model.FrameworkMethod;
+&nbsp;import org.junit.runners.model.Statement;
+&nbsp;
+&nbsp;class RuleContainer {
+<b class="fc">&nbsp;    private final IdentityHashMap&lt;Object, Integer&gt; orderValues = new IdentityHashMap();</b>
+<b class="fc">&nbsp;    private final List&lt;TestRule&gt; testRules = new ArrayList();</b>
+<b class="fc">&nbsp;    private final List&lt;MethodRule&gt; methodRules = new ArrayList();</b>
+<b class="fc">&nbsp;    static final Comparator&lt;RuleEntry&gt; ENTRY_COMPARATOR = new Comparator&lt;RuleEntry&gt;() {</b>
+&nbsp;        public int compare(RuleEntry o1, RuleEntry o2) {
+&nbsp;            int result = this.compareInt(o1.order, o2.order);
+&nbsp;            return result != 0 ? result : o1.type - o2.type;
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        private int compareInt(int a, int b) {</b>
+&nbsp;            return a &lt; b ? 1 : (a == b ? 0 : -1);
+&nbsp;        }
+&nbsp;    };
+<b class="nc">&nbsp;</b>
+&nbsp;    RuleContainer() {
+&nbsp;    }
+&nbsp;
+<b class="nc">&nbsp;    public void setOrder(Object rule, int order) {</b>
+&nbsp;        this.orderValues.put(rule, order);
+&nbsp;    }
+<b class="fc">&nbsp;</b>
+&nbsp;    public void add(MethodRule methodRule) {
+<b class="nc">&nbsp;        this.methodRules.add(methodRule);</b>
+<b class="nc">&nbsp;    }</b>
+&nbsp;
+&nbsp;    public void add(TestRule testRule) {
+&nbsp;        this.testRules.add(testRule);
+<b class="nc">&nbsp;    }</b>
+&nbsp;
+&nbsp;    private List&lt;RuleEntry&gt; getSortedEntries() {
+&nbsp;        List&lt;RuleEntry&gt; ruleEntries = new ArrayList(this.methodRules.size() + this.testRules.size());
+&nbsp;        Iterator i$ = this.methodRules.iterator();
+&nbsp;
+&nbsp;        while(i$.hasNext()) {
+&nbsp;            MethodRule rule = (MethodRule)i$.next();
+<b class="nc">&nbsp;            ruleEntries.add(new RuleEntry(rule, 0, (Integer)this.orderValues.get(rule)));</b>
+&nbsp;        }
+<b class="nc">&nbsp;</b>
+<b class="nc">&nbsp;        i$ = this.testRules.iterator();</b>
+&nbsp;
+<b class="nc">&nbsp;        while(i$.hasNext()) {</b>
+<b class="nc">&nbsp;            TestRule rule = (TestRule)i$.next();</b>
+&nbsp;            ruleEntries.add(new RuleEntry(rule, 1, (Integer)this.orderValues.get(rule)));
+<b class="nc">&nbsp;        }</b>
+<b class="nc">&nbsp;</b>
+&nbsp;        Collections.sort(ruleEntries, ENTRY_COMPARATOR);
+&nbsp;        return ruleEntries;
+&nbsp;    }
+&nbsp;
+&nbsp;    public Statement apply(FrameworkMethod method, Description description, Object target, Statement statement) {
+&nbsp;        if (this.methodRules.isEmpty() &amp;&amp; this.testRules.isEmpty()) {
+&nbsp;            return statement;
+<b class="pc">&nbsp;        } else {</b>
+<b class="fc">&nbsp;            Statement result = statement;</b>
+&nbsp;            Iterator i$ = this.getSortedEntries().iterator();
+<b class="nc">&nbsp;</b>
+<b class="nc">&nbsp;            while(i$.hasNext()) {</b>
+<b class="nc">&nbsp;                RuleEntry ruleEntry = (RuleEntry)i$.next();</b>
+<b class="nc">&nbsp;                if (ruleEntry.type == 1) {</b>
+&nbsp;                    result = ((TestRule)ruleEntry.rule).apply(result, description);
+<b class="nc">&nbsp;                } else {</b>
+&nbsp;                    result = ((MethodRule)ruleEntry.rule).apply(result, method, target);
+&nbsp;                }
+<b class="nc">&nbsp;            }</b>
+&nbsp;
+&nbsp;            return result;
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    List&lt;Object&gt; getSortedRules() {
+&nbsp;        List&lt;Object&gt; result = new ArrayList();
+<b class="nc">&nbsp;        Iterator i$ = this.getSortedEntries().iterator();</b>
+<b class="nc">&nbsp;</b>
+<b class="nc">&nbsp;        while(i$.hasNext()) {</b>
+&nbsp;            RuleEntry entry = (RuleEntry)i$.next();
+<b class="nc">&nbsp;            result.add(entry.rule);</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        return result;
+&nbsp;    }
+&nbsp;
+&nbsp;    static class RuleEntry {
+&nbsp;        static final int TYPE_TEST_RULE = 1;
+&nbsp;        static final int TYPE_METHOD_RULE = 0;
+&nbsp;        final Object rule;
+&nbsp;        final int type;
+&nbsp;        final int order;
+&nbsp;
+&nbsp;        RuleEntry(Object rule, int type, Integer order) {
+&nbsp;            this.rule = rule;
+&nbsp;            this.type = type;
+&nbsp;            this.order = order != null ? order : -1;
+&nbsp;        }
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-06-03 23:11</div>
+</div>
+</body>
+</html>

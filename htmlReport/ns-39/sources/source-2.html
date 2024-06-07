@@ -1,0 +1,193 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=windows-1252"> 
+  <title>Coverage Report > MultipleFailuresError</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">org.opentest4j</a>
+</div>
+
+<h1>Coverage Summary for Class: MultipleFailuresError (org.opentest4j)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">MultipleFailuresError</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/8)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/20)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/33)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;//
+&nbsp;// Source code recreated from a .class file by IntelliJ IDEA
+&nbsp;// (powered by FernFlower decompiler)
+&nbsp;//
+&nbsp;
+&nbsp;package org.opentest4j;
+&nbsp;
+&nbsp;import java.util.ArrayList;
+&nbsp;import java.util.Collections;
+&nbsp;import java.util.Iterator;
+&nbsp;import java.util.List;
+&nbsp;
+&nbsp;public class MultipleFailuresError extends AssertionError {
+&nbsp;    private static final long serialVersionUID = 1L;
+&nbsp;    private static final String EOL = System.getProperty(&quot;line.separator&quot;);
+&nbsp;    private final String heading;
+&nbsp;    private final List&lt;Throwable&gt; failures;
+&nbsp;
+&nbsp;    public MultipleFailuresError(String heading, List&lt;? extends Throwable&gt; failures) {
+&nbsp;        if (failures == null) {
+&nbsp;            throw new NullPointerException(&quot;failures must not be null&quot;);
+&nbsp;        } else {
+&nbsp;            this.heading = isBlank(heading) ? &quot;Multiple Failures&quot; : heading.trim();
+&nbsp;            this.failures = new ArrayList();
+&nbsp;            Iterator var3 = failures.iterator();
+&nbsp;
+&nbsp;            while(var3.hasNext()) {
+&nbsp;                Throwable failure = (Throwable)var3.next();
+&nbsp;                if (failure == null) {
+&nbsp;                    throw new NullPointerException(&quot;failures must not contain null elements&quot;);
+&nbsp;                }
+&nbsp;
+&nbsp;                this.failures.add(failure);
+&nbsp;            }
+&nbsp;
+&nbsp;        }
+<b class="nc">&nbsp;    }</b>
+&nbsp;
+&nbsp;    public String getMessage() {
+&nbsp;        int failureCount = this.failures.size();
+&nbsp;        if (failureCount == 0) {
+&nbsp;            return this.heading;
+&nbsp;        } else {
+&nbsp;            StringBuilder builder = (new StringBuilder(this.heading)).append(&quot; (&quot;).append(failureCount).append(&quot; &quot;).append(pluralize(failureCount, &quot;failure&quot;, &quot;failures&quot;)).append(&quot;)&quot;).append(EOL);
+&nbsp;            int lastIndex = failureCount - 1;
+&nbsp;            Iterator var4 = this.failures.subList(0, lastIndex).iterator();
+&nbsp;
+&nbsp;            while(var4.hasNext()) {
+&nbsp;                Throwable failure = (Throwable)var4.next();
+&nbsp;                builder.append(&quot;\t&quot;).append(nullSafeMessage(failure)).append(EOL);
+<b class="nc">&nbsp;            }</b>
+<b class="nc">&nbsp;</b>
+<b class="nc">&nbsp;            builder.append(&#39;\t&#39;).append(nullSafeMessage((Throwable)this.failures.get(lastIndex)));</b>
+&nbsp;            return builder.toString();
+<b class="nc">&nbsp;        }</b>
+&nbsp;    }
+<b class="nc">&nbsp;</b>
+<b class="nc">&nbsp;    public List&lt;Throwable&gt; getFailures() {</b>
+<b class="nc">&nbsp;        return Collections.unmodifiableList(this.failures);</b>
+<b class="nc">&nbsp;    }</b>
+&nbsp;
+<b class="nc">&nbsp;    public boolean hasFailures() {</b>
+<b class="nc">&nbsp;        return !this.failures.isEmpty();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private static boolean isBlank(String str) {
+&nbsp;        return str == null || str.trim().length() == 0;
+<b class="nc">&nbsp;    }</b>
+&nbsp;
+<b class="nc">&nbsp;    private static String pluralize(int count, String singular, String plural) {</b>
+<b class="nc">&nbsp;        return count == 1 ? singular : plural;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private static String nullSafeMessage(Throwable failure) {
+<b class="nc">&nbsp;        return isBlank(failure.getMessage()) ? failure.getClass().getName() + &quot;: &lt;no message&gt;&quot; : failure.getClass().getName() + &quot;: &quot; + failure.getMessage();</b>
+<b class="nc">&nbsp;    }</b>
+<b class="nc">&nbsp;}</b>
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-06-04 11:14</div>
+</div>
+</body>
+</html>
